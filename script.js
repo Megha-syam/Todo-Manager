@@ -18,9 +18,12 @@ function createNode(todo,index){
     checkbox.checked=!!todo.completed;
     checkbox.addEventListener("change",()=>{
         todo.completed=checkbox.checked;
+
+        textSpan.style.textDecoration=todo.completed? 'line-through': "";
          saveTodos();
     })
 
+    //todo text
     const textSpan=document.createElement("span");
     textSpan.textContent=todo.text;
     textSpan.style.margin='0 8px';
@@ -42,9 +45,9 @@ function createNode(todo,index){
         //delete
 
         const delBtn=document.createElement('button');
-        delBtn.textContent='Delete';
+        delBtn.textContent="Delete";
         delBtn.addEventListener('click',()=>{
-            todo.splice(index,1);
+            todos.splice(index,1);
             render();
             saveTodos();
         })
@@ -60,21 +63,27 @@ function render(){
 
     todos.forEach((todo,index) => {
         const node=createNode(todo,index);
+        console.log(node,index)
         list.appendChild(node)
     });
 }
 
 function addTodo(){
-    const text=input.ariaValueMax.trim();
+    const text=input.value.trim();
 
     if(!text){
         return
     }
-    todo.push({text,completed:false});
+    todos.push({text:text,completed:false});
     input.value='';
-    render();
-    saveTodos();
+    render()
+    saveTodos()
 }
 
 addbtn.addEventListener("click",addTodo);
+input.addEventListener('keydown',(e)=>{
+    if(e.key=='Enter'){
+        addTodo();
+    }
+})
 render();
